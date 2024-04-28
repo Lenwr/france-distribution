@@ -1,5 +1,6 @@
 <script setup>
 import {getFirestore, collection, addDoc} from 'firebase/firestore'
+import "vue3-toastify/dist/index.css";
 
 import {ref} from 'vue'
 
@@ -11,6 +12,7 @@ import {
   getDownloadURL,
 } from 'firebase/storage'
 import {toast} from "vue3-toastify";
+
 
 const product = ref({
   date:'',
@@ -50,7 +52,6 @@ async function submitForm() {
       imageUrl: imageUrl, // Stockez l'URL de l'image dans Firestore
     }
     const newDocumentRef = await addDoc(produitsCollection, Data)
-    console.log('Document ajouté avec ID :', newDocumentRef.id)
     //await router.push({path: '/soumission'})
     product.value.name = "",
       product.value.quantity = "",
@@ -73,12 +74,12 @@ async function submitForm() {
 
 <template>
   <div
-      class="bg-white flex h-full flex-1 flex-col item-center justify-center px-6 py-12 lg:px-8"
+      class=" bg-white flex flex-1 flex-col item-center justify-center px-6 py-12 lg:px-8 "
   >
 
     <H1 class="text-black text-2xl pb-4"> Enregistrer un produit </H1>
 
-    <form class="space-y-6" @submit.prevent="submitForm">
+    <form class="space-y-6 mb-10" @submit.prevent="submitForm">
 
       <div class="date mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
         <div class="sm:col-span-3">

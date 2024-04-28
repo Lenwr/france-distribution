@@ -17,13 +17,15 @@
 <script setup>
      import {ref} from "vue";
      import Order from "./Order.vue";
-
-     const statut = ref('')
+     import "vue3-toastify/dist/index.css";
+     const statut = ref('commande')
      const changeStatutCommande = () => {
        statut.value = 'commande'
+       console.log(statut.value)
      }
      const changeStatutStock = () => {
-statut.value = 'stock'
+        statut.value = 'stock'
+       console.log(statut.value)
      }
 
 
