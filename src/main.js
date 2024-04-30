@@ -5,6 +5,7 @@ import App from './App.vue'
 import router from './router'
 import {firebaseApp} from "./components/firebaseConfig.js";
 import {VueFire} from "vuefire";
+import PrimeVue from "primevue/config";
 const app = createApp(App)
 
 
@@ -17,3 +18,4 @@ app.use(VueFire, {
     ],
 })
 app.mount('#app')
+app.use(PrimeVue);

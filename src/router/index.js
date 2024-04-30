@@ -4,6 +4,7 @@ import Form from '../views/form.vue'
 import Order from "../views/Order.vue";
 import Stock from "../views/Stock.vue";
 import Gestion from "../views/Gestion.vue";
+import Articles from "../views/articles.vue";
 
 const router = createRouter({
   history: createWebHashHistory(),
@@ -29,6 +30,11 @@ const router = createRouter({
       path: '/gestion',
       component: Gestion,
     },
+    {
+      path: '/articles/:id',
+      component: Articles,
+    },
+
 
   ],
 })

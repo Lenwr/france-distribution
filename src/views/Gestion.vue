@@ -9,8 +9,11 @@
       </button>
     </div>
   </div>
-  <div>
-    <Order :Statut="statut" />
+  <div v-if="viewPage=='commande'" >
+    <Order />
+  </div>
+  <div v-if="viewPage=='stock'"  >
+    <Stock />
   </div>
 </template>
 
@@ -18,14 +21,15 @@
      import {ref} from "vue";
      import Order from "./Order.vue";
      import "vue3-toastify/dist/index.css";
-     const statut = ref('commande')
+     import Stock from "./Stock.vue";
+     const viewPage = ref('commande')
      const changeStatutCommande = () => {
-       statut.value = 'commande'
-       console.log(statut.value)
+       viewPage.value = 'commande'
+       console.log(viewPage.value)
      }
      const changeStatutStock = () => {
-        statut.value = 'stock'
-       console.log(statut.value)
+        viewPage.value = 'stock'
+       console.log(viewPage.value)
      }
 
 

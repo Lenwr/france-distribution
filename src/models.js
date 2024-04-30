@@ -1,4 +1,5 @@
 export const category = ([
+ "",
 "Petits prix, grandes économies",
       " Saison Jardin",
    " Produits laitiers, oeufs, fromages",
