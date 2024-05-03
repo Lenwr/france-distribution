@@ -8,9 +8,6 @@ import frLocale from "date-fns/locale/fr";
 
 
 const db = useFirestore()
-const props = defineProps({
-  Statut: String
-})
 
 
 const Liste = useCollection(collection(db, 'commande'))
@@ -33,16 +30,16 @@ const commande = ref({
 
 const query = ref('')
 let filteredList = Liste
-
 async function listFilter() {
   filteredList = computed(() => {
     const lowerCaseQuery = query.value.toLowerCase().trim()
-    return filteredList.value.filter(
+    console.log(lowerCaseQuery)
+    return Liste.value.filter(
         (item) => item.name && item.name.toLowerCase().includes(lowerCaseQuery),
     )
   })
-}
 
+}
 
 const formatDateTime = (dateTimeString) => {
   // Extraire la date et l'heure de la chaîne à l'aide d'une expression régulière
@@ -112,7 +109,7 @@ async function deleteLoad(id) {
                   scope="col"
                   class="text-sm font-medium text-gray-900 px-6 py-4 text-left"
               >
-                Prix
+                Prix d'achat
               </th>
               <th
                   scope="col"

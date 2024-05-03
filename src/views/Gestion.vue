@@ -22,7 +22,9 @@
      import Order from "./Order.vue";
      import "vue3-toastify/dist/index.css";
      import Stock from "./Stock.vue";
+     import {useRoute} from "vue-router";
      const viewPage = ref('commande')
+     const route = useRoute()
      const changeStatutCommande = () => {
        viewPage.value = 'commande'
        console.log(viewPage.value)
@@ -31,7 +33,8 @@
         viewPage.value = 'stock'
        console.log(viewPage.value)
      }
-
+     const category = ref(route.params.category)
+     console.log()
 
 
 </script>
