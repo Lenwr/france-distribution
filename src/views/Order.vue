@@ -170,7 +170,7 @@ async function deleteLoad(id) {
               <td
                   class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap"
               >
-                {{ item.price * item.quantity }}€
+                {{ Math.round(item.quantity *item.price *100)/100}}€
               </td>
 
               <td
