@@ -67,7 +67,7 @@ async function deleteLoad(id) {
 
 <template>
   <!-- component -->
-  <div class="mb-10">
+  <div>
     <!-- <return route="" /> -->
     <span class="flex flex-row items-center justify-center px-2 py-4">
       <p class="text-black px-4">Rechercher</p>

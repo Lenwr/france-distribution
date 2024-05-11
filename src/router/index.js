@@ -15,7 +15,7 @@ const router = createRouter({
       component: Form,
     },
     {
-      path: '/home',
+      path: '/',
       component: HomeView,
     },
     {

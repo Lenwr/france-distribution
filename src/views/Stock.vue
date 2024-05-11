@@ -5,6 +5,7 @@ import {computed, ref} from 'vue'
 import {toast} from "vue3-toastify";
 import {format} from "date-fns";
 import frLocale from "date-fns/locale/fr";
+import {category} from "../models.js";
 
 
 const db = useFirestore()
@@ -45,6 +46,24 @@ const formatDateTime = (dateTimeString) => {
   return format(date, "EEEE d MMMM yyyy à HH'h' mm", {locale: frLocale})
 }
 
+async function updateStock(id) {
+  const DocRef = doc(db, 'stock', id)
+  await updateDoc(DocRef, {
+    name: stock.value.name,
+    brand: stock.value.brand,
+    category: stock.value.category,
+    price: stock.value.price,
+  })
+      .then(()=>{
+        toast("Formulaire envoyé", {
+          "theme": "auto",
+          "type": "success",
+          "autoClose":1000,
+          "dangerouslyHTMLString": true
+        })
+      })
+}
+
 async function deleteLoad(id) {
   const DocRef = doc(db, 'stock', id)
   await deleteDoc(DocRef)
@@ -60,7 +79,7 @@ async function deleteLoad(id) {
 
 <template>
   <!-- component -->
-  <div class="mb-10">
+  <div>
     <!-- <return route="" /> -->
     <span class="flex flex-row items-center justify-center px-2 py-4">
       <p class="text-black px-4">Rechercher</p>
@@ -149,7 +168,7 @@ async function deleteLoad(id) {
               <td
                   class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap"
               >
-                {{ item.price }}FCFA
+                {{ item.price }}€
               </td>
               <td
                   class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap"
@@ -166,6 +185,62 @@ async function deleteLoad(id) {
               >
                 {{ item.price * item.quantity }}€
               </td>
+              <td>
+                <button class="btn btn-primary" onclick="my_modal_5.showModal()">Modifier</button>
+                <dialog id="my_modal_5" class="modal modal-bottom sm:modal-middle">
+                  <div class="modal-box bg-white text-black">
+                    <h3 class="font-bold text-lg">Modifier</h3>
+                    <p class="py-4"></p>
+                    <form @submit.prevent="updateStock(item.id)">
+                      <div class="quantity pb-2">
+                        <label
+                            for="quantity"
+                            class="block text-sm font-medium leading-6 text-gray-900"
+                        >
+                          Quantité
+                        </label>
+                        <div class="mt-2">
+                          <input
+                              type="text"
+                              id="prix"
+                              name="prix"
+                              required
+                              v-model="stock.quantity"
+                              class="block h-[3em] w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 pl-4"
+                              :placeholder=item.quantity
+                          />
+                        </div>
+                      </div>
+                      <div class="price pb-2">
+                        <label
+                            for="price"
+                            class="block text-sm font-medium leading-6 text-gray-900"
+                        >
+                          Prix
+                        </label>
+                        <div class="mt-2">
+                          <input
+                              type="text"
+                              id="prix"
+                              name="prix"
+                              required
+                              v-model="stock.price"
+                              class="block h-[3em] w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 pl-4"
+                             :placeholder=item.price
+                          />
+                        </div>
+                      </div>
+                      <button class="btn btn-primary text-white">Envoyer</button>
+                    </form>
+                    <div class="modal-action">
+                      <form method="dialog">
+                        <!-- if there is a button in form, it will close the modal -->
+                        <button class="btn btn-primary text-white">Fermer</button>
+                      </form>
+                    </div>
+                  </div>
+                </dialog>
+              </td>
               <td class="text-black">
                 <svg @click="deleteLoad(item.id)" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                      stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -181,8 +256,6 @@ async function deleteLoad(id) {
     </div>
 
   </div>
-
-
 
 
 

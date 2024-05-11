@@ -35,7 +35,7 @@ const toForm = () => {
   router.push({ path: '/form'})
 }
 const toHome = () => {
-  router.push({ path: '/home'})
+  router.push({ path: '/'})
 }
 const toGestion = () => {
   router.push({ path: '/gestion'})

@@ -18,7 +18,7 @@ async function toGestion(variable) {
 </script>
 
 <template>
-  <div class="flex flex-col items-center  justify-center">
+  <div class="flex flex-col items-center justify-center">
 
     <div
         class="bg-primary mobile:w-[80%] sm:w-[50%] py-6 mt-20 rounded-2xl shadow-2xl"

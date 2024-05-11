@@ -12,6 +12,7 @@ import {
   getDownloadURL,
 } from 'firebase/storage'
 import {toast} from "vue3-toastify";
+import {useCollection} from "vuefire";
 
 
 const commande = ref({
@@ -27,6 +28,7 @@ const commande = ref({
 const db = getFirestore()
 const  commandeCollection = collection(db, 'commande')
 const storage = getStorage()
+const Liste = useCollection(collection(db, 'commande'))
 
 
 const handleFileChange = (event) => {
@@ -69,7 +71,22 @@ async function submitForm() {
   }
 }
 
+const suggestions = ref([])
+const filterItems = () => {
+  if (commande.value.name.trim() === '') {
+    suggestions.value = []
+    return
+  }
 
+  const lowerCaseQuery = commande.value.name.toLowerCase().trim()
+  suggestions.value = Liste.value.filter(
+      (item) => item.name && item.name.toLowerCase().includes(lowerCaseQuery)
+  )
+}
+
+const selectItem = (item) => {
+console.log(item)
+}
 
 </script>
 
@@ -115,10 +132,20 @@ async function submitForm() {
         <input
             type="text"
             v-model="commande.name"
-            autocomplete=""
+            @input="filterItems"
             class="block h-[3em] w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 pl-4"
-            placeholder="Nom du commande"
+            placeholder="Nom de l'article"
         />
+        <div v-if="suggestions.length > 0" class="autocomplete block w-full max-w-xxs rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 pl-4">
+          <div
+              v-for="suggestion in suggestions"
+              :key="suggestion.id"
+              @click="selectItem(suggestion)"
+              class="suggestion"
+          >
+            {{ suggestion.name }}
+          </div>
+        </div>
       </div>
     </div>
       <div class="name pb-2">
@@ -134,7 +161,7 @@ async function submitForm() {
 
               v-model="commande.brand"
               class="block h-[3em] w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 pl-4"
-              placeholder="Marque du commande"
+              placeholder="Marque de l'article"
           />
         </div>
       </div>
@@ -227,5 +254,21 @@ async function submitForm() {
 </template>
 
 <style scoped>
+.autocomplete {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  max-height: 150px; /* limiter la hauteur pour la rendre scrollable */
 
+  overflow-y: auto;
+}
+
+.suggestion {
+  padding: 5px;
+  cursor: pointer;
+  color: black;
+}
+
+.suggestion:hover {
+  background-color: #f0f0f0;
+}
 </style>
