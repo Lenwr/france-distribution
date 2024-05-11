@@ -5,6 +5,7 @@ import Order from "../views/Order.vue";
 import Stock from "../views/Stock.vue";
 import Gestion from "../views/Gestion.vue";
 import Articles from "../views/articles.vue";
+import UpdateStockView from "../views/updateStockView.vue";
 
 const router = createRouter({
   history: createWebHashHistory(),
@@ -33,6 +34,10 @@ const router = createRouter({
     {
       path: '/articles/:id',
       component: Articles,
+    },
+    {
+      path: '/updateStock/:id',
+      component: UpdateStockView,
     },
 
 
