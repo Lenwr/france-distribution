@@ -110,7 +110,7 @@ async function newOrder(myItem){
   const updateProduct = new Promise(async (resolve, reject) => {
     const updateCustomerDoc = await updateDoc(docRef, {
       date:commande.value.date,
-      quantity: myItem.quantity + commande.value.quantity,
+      quantity: parseInt(myItem.quantity) + parseInt(commande.value.quantity),
     });
 })
   toast("Nouvelle commande ajoutée", {
