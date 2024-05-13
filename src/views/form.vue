@@ -1,5 +1,5 @@
 <script setup>
-import {getFirestore, collection, addDoc , getDocs } from 'firebase/firestore'
+import {getFirestore, collection, addDoc, getDocs} from 'firebase/firestore'
 import "vue3-toastify/dist/index.css";
 
 import {ref} from 'vue'
@@ -13,20 +13,21 @@ import {
 } from 'firebase/storage'
 import {toast} from "vue3-toastify";
 import {useCollection} from "vuefire";
+import router from "../router/index.js";
 
 
 const commande = ref({
-  date:'',
+  date: '',
   name: '',
   quantity: '',
   price: '',
   category: [],
-  brand:"",
+  brand: "",
   image: null,
 })
 
 const db = getFirestore()
-const  commandeCollection = collection(db, 'commande')
+const commandeCollection = collection(db, 'commande')
 const storage = getStorage()
 const Liste = useCollection(collection(db, 'commande'))
 
@@ -34,6 +35,7 @@ const Liste = useCollection(collection(db, 'commande'))
 const handleFileChange = (event) => {
   commande.image = event.target.files[0]
 }
+
 async function submitForm() {
   try {
     // Téléchargez l'image vers Firebase Storage
@@ -55,17 +57,18 @@ async function submitForm() {
       imageUrl: imageUrl, // Stockez l'URL de l'image dans Firestore
     }
     const newDocumentRef = await addDoc(commandeCollection, Data)
-    commande.value.name = "",
-      commande.value.quantity = "",
-         commande.value.price="",
-      commande.value.category = [],
-        await console.log('formulaire envoyé ')
-    toast("Formulaire envoyé", {
-      "theme": "auto",
-      "type": "success",
-      "autoClose":1000,
-      "dangerouslyHTMLString": true
-    })
+    commande.value.name = ""
+        commande.value.quantity = ""
+        commande.value.price = ""
+        commande.value.category = []
+            .then(()=>{
+              toast("Formulaire envoyé", {
+                "theme": "auto",
+                "type": "success",
+                "autoClose": 1000,
+                "dangerouslyHTMLString": true
+              })
+            })
   } catch (error) {
     console.error("Erreur lors de l'envoi du formulaire :", error)
   }
@@ -85,7 +88,7 @@ const filterItems = () => {
 }
 
 const selectItem = (item) => {
-console.log(item)
+  router.push('/articles/'+ item.id)
 }
 
 </script>
@@ -121,33 +124,34 @@ console.log(item)
         </div>
       </div>
 
-    <div class="name pb-2">
-      <label
-          for="prix"
-          class="block text-sm font-medium leading-6 text-gray-900"
-      >
-       Nom
-      </label>
-      <div class="mt-2">
-        <input
-            type="text"
-            v-model="commande.name"
-            @input="filterItems"
-            class="block h-[3em] w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 pl-4"
-            placeholder="Nom de l'article"
-        />
-        <div v-if="suggestions.length > 0" class="autocomplete block w-full max-w-xxs rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 pl-4">
-          <div
-              v-for="suggestion in suggestions"
-              :key="suggestion.id"
-              @click="selectItem(suggestion)"
-              class="suggestion"
-          >
-            {{ suggestion.name }}
+      <div class="name pb-2">
+        <label
+            for="prix"
+            class="block text-sm font-medium leading-6 text-gray-900"
+        >
+          Nom
+        </label>
+        <div class="mt-2">
+          <input
+              type="text"
+              v-model="commande.name"
+              @input="filterItems"
+              class="block h-[3em] w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 pl-4"
+              placeholder="Nom de l'article"
+          />
+          <div v-if="suggestions.length > 0"
+               class="autocomplete block w-full max-w-xxs rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 pl-4">
+            <div
+                v-for="suggestion in suggestions"
+                :key="suggestion.id"
+                @click="selectItem(suggestion)"
+                class="suggestion"
+            >
+              {{ suggestion.name }}
+            </div>
           </div>
         </div>
       </div>
-    </div>
       <div class="name pb-2">
         <label
             for="marque"
@@ -165,87 +169,88 @@ console.log(item)
           />
         </div>
       </div>
-    <div class="quantity pb-2">
-      <label
-          for="quantity"
-          class="block text-sm font-medium leading-6 text-gray-900"
-      >
-        Quantité
-      </label>
-      <div class="mt-2">
-        <input
-            type="text"
-            id="prix"
-            name="prix"
-            v-model="commande.quantity"
-            class="block h-[3em] w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 pl-4"
-            placeholder="Quantité"
-        />
+      <div class="quantity pb-2">
+        <label
+            for="quantity"
+            class="block text-sm font-medium leading-6 text-gray-900"
+        >
+          Quantité
+        </label>
+        <div class="mt-2">
+          <input
+              type="text"
+              id="prix"
+              name="prix"
+              v-model="commande.quantity"
+              class="block h-[3em] w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 pl-4"
+              placeholder="Quantité"
+          />
+        </div>
       </div>
-    </div>
-    <div class="price pb-2">
-      <label
-          for="price"
-          class="block text-sm font-medium leading-6 text-gray-900"
-      >
-        Prix
-      </label>
-      <div class="mt-2">
-        <input
-            type="text"
-            id="prix"
-            name="prix"
-            v-model="commande.price"
-            class="block h-[3em] w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 pl-4"
-            placeholder="Prix"
-        />
+      <div class="price pb-2">
+        <label
+            for="price"
+            class="block text-sm font-medium leading-6 text-gray-900"
+        >
+          Prix
+        </label>
+        <div class="mt-2">
+          <input
+              type="text"
+              id="prix"
+              name="prix"
+              v-model="commande.price"
+              class="block h-[3em] w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 pl-4"
+              placeholder="Prix"
+          />
+        </div>
       </div>
-    </div>
-    <div class="image pb-2">
-      <label
-          for="image"
-          class="block text-sm font-medium leading-6 text-gray-900"
-      >
-        Image
-      </label>
-      <div class="mt-2">
-        <input
-            required
-            type="file"
-            id="image"
-            @change="handleFileChange"
-            accept="image/*"
-            class="block bg-white file-input max-w-xs w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-        />
+      <div class="image pb-2">
+        <label
+            for="image"
+            class="block text-sm font-medium leading-6 text-gray-900"
+        >
+          Image
+        </label>
+        <div class="mt-2">
+          <input
+              required
+              type="file"
+              id="image"
+              @change="handleFileChange"
+              accept="image/*"
+              class="block bg-white file-input max-w-xs w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+          />
+        </div>
       </div>
-    </div>
-    <div class="category pb-2">
-      <label
-          for="category"
-          class="block text-sm font-medium leading-6 text-gray-900"
-      >
-        Catégorie
-      </label>
-      <select
-          id="modeDePaiement"
-          name="modeDePaiement"
-          v-model="commande.category"
-          autocomplete="modeDePaiement"
-          class="block h-[3em] w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
-      >
-       <option
-           v-for="item in category"
-       >{{item}}</option>
+      <div class="category pb-2">
+        <label
+            for="category"
+            class="block text-sm font-medium leading-6 text-gray-900"
+        >
+          Catégorie
+        </label>
+        <select
+            id="modeDePaiement"
+            name="modeDePaiement"
+            v-model="commande.category"
+            autocomplete="modeDePaiement"
+            class="block h-[3em] w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+        >
+          <option
+              v-for="item in category"
+          >{{ item }}
+          </option>
 
-      </select>
-  </div>
+        </select>
+      </div>
 
-    <button
-        type="submit"
-        class="flex h-[3em] w-full justify-center rounded-md bg-primary px-3 py-1.5 mb-[2em] text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-    >
-      Enregistrer
-    </button>
+      <button
+          type="submit"
+          class="flex h-[3em] w-full justify-center rounded-md bg-primary px-3 py-1.5 mb-[2em] text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+      >
+        Enregistrer
+      </button>
 
     </form>
 
